@@ -12,6 +12,7 @@ const BACKEND_URL = API_BASE_URL;
 const AVATAR_COLOR_COUNT = 8;
 const OBJECT_ID_REGEX = /^[a-f\d]{24}$/i;
 
+
 // ---- Pure helpers (no component state) ------------------------------
 
 // Consistent, good-looking avatar color per username instead of a random one.
