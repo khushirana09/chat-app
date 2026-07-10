@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .login-container {
   display: grid;
   font-family: "Inter, sans-serif" !important;
@@ -65,5 +66,87 @@ form.login-form svg {
   .profile-pic {
     width: 90px;
     height: 90px;
+=======
+@import "./theme.css";
+
+/* =========================================================
+   Login page — layout specific to this screen only.
+   Shared tokens/components live in theme.css.
+   ========================================================= */
+
+.login-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+  background: var(--pink);
+}
+
+.login-shell .bg-blob:nth-child(1) {
+  width: 44vw;
+  height: 44vw;
+  background: var(--purple);
+  top: -18%;
+  right: -14%;
+}
+
+.login-shell .bg-blob:nth-child(2) {
+  width: 36vw;
+  height: 36vw;
+  background: var(--yellow);
+  bottom: -14%;
+  left: -10%;
+  animation-delay: 1s;
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  background: var(--white);
+  border: 3px solid var(--ink);
+  border-radius: 28px 28px 28px 8px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-pop-hover);
+}
+
+.login-avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  box-shadow: var(--shadow-pop-sm);
+  object-fit: cover;
+  margin: 0 auto 1rem;
+  display: block;
+  background: var(--bg-cream);
+}
+
+.login-card h1 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem;
+  color: var(--ink);
+}
+
+.login-card .auth-subtitle {
+  margin-bottom: 1.75rem;
+}
+
+.login-card form {
+  text-align: left;
+}
+
+@media (max-width: 420px) {
+  .login-card {
+    padding: 1.75rem 1.25rem;
+    border-radius: 22px 22px 22px 8px;
+>>>>>>> master
   }
 }

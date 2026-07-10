@@ -1,0 +1,102 @@
+@import "./theme.css";
+
+/* =========================================================
+   WelcomeName (Step 1 of onboarding) — layout specific to
+   this screen only. Shared tokens/components live in theme.css.
+   ========================================================= */
+
+.welcome-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+  background: var(--sky);
+}
+
+.welcome-shell .bg-blob:nth-child(1) {
+  width: 42vw;
+  height: 42vw;
+  background: var(--yellow);
+  top: -16%;
+  left: -14%;
+}
+
+.welcome-shell .bg-blob:nth-child(2) {
+  width: 38vw;
+  height: 38vw;
+  background: var(--pink);
+  bottom: -18%;
+  right: -10%;
+  animation-delay: 1.2s;
+}
+
+.welcome-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  background: var(--white);
+  border: 3px solid var(--ink);
+  border-radius: 28px 28px 28px 8px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-pop-hover);
+}
+
+.welcome-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.welcome-greeting {
+  font-size: 2rem;
+  position: absolute;
+  top: 14px;
+  right: 22px;
+  animation: wave 2.2s ease-in-out infinite;
+  transform-origin: 70% 70%;
+  display: inline-block;
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  15% { transform: rotate(14deg); }
+  30% { transform: rotate(-8deg); }
+  45% { transform: rotate(14deg); }
+  60% { transform: rotate(0deg); }
+}
+
+.welcome-card h1 {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+  color: var(--ink);
+}
+
+.welcome-card .auth-subtitle {
+  margin-bottom: 1.75rem;
+}
+
+.welcome-card form {
+  text-align: left;
+}
+
+@media (max-width: 420px) {
+  .welcome-card {
+    padding: 1.75rem 1.25rem;
+    border-radius: 22px 22px 22px 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-greeting {
+    animation: none;
+  }
+}

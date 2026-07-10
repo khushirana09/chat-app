@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from "react"; // ✅ import useEffect
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { FaEnvelope } from "react-icons/fa";
 import axios from "axios";
-import "../styles/Register.css";
+import { API_BASE_URL } from "../config";
+import "../styles/theme.css";
+import "../styles/SimpleAuth.css";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -15,71 +19,82 @@ const ForgotPassword = () => {
     setError("");
 
     try {
-      const res = await axios.post(
-        "https://chatapp-7ybi.onrender.com/api/auth/forgot-password",
-        { email }
-      );
+      const res = await axios.post(`${API_BASE_URL}/api/auth/forgot-password`, {
+        email,
+      });
       setMessage(res.data.message);
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      setError(
+        err.response?.data?.message || "Something went wrong. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Auto-clear success message after 4 seconds
-  useEffect(() => {
-    if (message) {
-      const timer = setTimeout(() => {
-        setMessage("");
-      }, 4000);
-      return () => clearTimeout(timer); // Cleanup on unmount or re-run
-    }
-  }, [message]);
-
   return (
-    <div style={{ position: "relative" }}>
-      {/* Loader overlay */}
-      {loading && (
-        <div className="loader-overlay">
-          <div className="loader-box">
-            <div className="spinner"></div>
-            <div className="loader-message">Sending reset link...</div>
-          </div>
-        </div>
-      )}
+    <div className="auth-page">
+      <div className="simple-auth-shell">
+        <div className="bg-blob" aria-hidden="true"></div>
+        <div className="bg-blob" aria-hidden="true"></div>
 
-      {/* Error overlay */}
-      {error && (
-        <div className="loader-overlay" onClick={() => setError("")}>
-          <div className="loader-box">
-            <div className="loader-message" style={{ color: "red" }}>
-              ❌ {error}
+        <div className="simple-auth-card">
+          <div className="mascot" aria-hidden="true">
+            <div className="mascot-body">
+              <span className="mascot-eye"></span>
+              <span className="mascot-eye"></span>
             </div>
           </div>
-        </div>
-      )}
 
-      {/* Success message - disappears automatically */}
+          <h1>Forgot your password?</h1>
+          <p className="auth-subtitle">
+            No worries — we'll email you a reset link.
+          </p>
+
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="field-group">
+              <label htmlFor="email">Email</label>
+              <div className="input-wrap">
+                <FaEnvelope className="input-icon" />
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="Your registered email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? <span className="btn-spinner" /> : "Send reset link"}
+            </button>
+          </form>
+
+          <p className="auth-switch">
+            <Link to="/login">Back to login</Link>
+          </p>
+        </div>
+      </div>
+
       {message && !error && (
-        <div className="loader-overlay">
+        <div className="loader-overlay" onClick={() => setMessage("")}>
           <div className="loader-box">
             <div className="loader-message">✅ {message}</div>
           </div>
         </div>
       )}
 
-      <h2>Forgot Password</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Enter your registered email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <button type="submit">Send Reset Link</button>
-      </form>
+      {error && (
+        <div className="loader-overlay" onClick={() => setError("")}>
+          <div className="loader-box">
+            <div className="loader-message" style={{ color: "#ff5768" }}>
+              {error}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,0 +1,146 @@
+@import "./theme.css";
+
+/* =========================================================
+   SelectAvatar (Step 2 of onboarding) — layout specific to
+   this screen only. Shared tokens/components live in theme.css.
+   ========================================================= */
+
+.avatar-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+  background: var(--green);
+}
+
+.avatar-shell .bg-blob:nth-child(1) {
+  width: 42vw;
+  height: 42vw;
+  background: var(--purple);
+  top: -16%;
+  right: -12%;
+}
+
+.avatar-shell .bg-blob:nth-child(2) {
+  width: 36vw;
+  height: 36vw;
+  background: var(--yellow);
+  bottom: -16%;
+  left: -10%;
+  animation-delay: 1.1s;
+}
+
+.avatar-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  background: var(--white);
+  border: 3px solid var(--ink);
+  border-radius: 28px 28px 28px 8px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-pop-hover);
+}
+
+.avatar-skip-row {
+  display: flex;
+  justify-content: flex-end;
+  margin: -0.5rem 0 0.5rem;
+}
+
+.avatar-skip-row button {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.avatar-card h1 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0.25rem 0 0.4rem;
+  color: var(--ink);
+}
+
+.avatar-card .auth-subtitle {
+  margin-bottom: 1.5rem;
+}
+
+.avatar-preview {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  box-shadow: var(--shadow-pop-sm);
+  object-fit: cover;
+  margin: 0 auto 1.25rem;
+  display: block;
+  background: var(--bg-cream);
+}
+
+.avatar-placeholder {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 3px dashed var(--ink);
+  margin: 0 auto 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  background: var(--bg-cream);
+}
+
+.avatar-upload-label {
+  display: inline-block;
+  cursor: pointer;
+  font-weight: 800;
+  font-family: var(--font-display);
+  color: var(--purple-deep);
+  border: 3px solid var(--ink);
+  background: var(--white);
+  border-radius: 999px;
+  padding: 0.6rem 1.3rem;
+  box-shadow: var(--shadow-pop-sm);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  margin-bottom: 1.75rem;
+}
+
+.avatar-upload-label:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-pop);
+}
+
+.avatar-upload-label input {
+  display: none;
+}
+
+.avatar-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.avatar-actions .submit-btn {
+  margin-top: 0;
+}
+
+@media (max-width: 420px) {
+  .avatar-card {
+    padding: 1.75rem 1.25rem;
+    border-radius: 22px 22px 22px 8px;
+  }
+
+  .avatar-preview,
+  .avatar-placeholder {
+    width: 100px;
+    height: 100px;
+  }
+}

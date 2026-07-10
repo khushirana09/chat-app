@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const rateLimit = require("express-rate-limit");
 const User = require("../models/User");
 require("dotenv").config();
 
@@ -11,16 +12,45 @@ const {
   resetPassword,
 } = require("../controllers/authController");
 
+// Login: the classic brute-force target — limit attempts per IP, not per
+// account, so an attacker can't just spread guesses across many usernames.
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: "Too many login attempts. Please try again in a few minutes." },
+});
+
+// Register: cheap to abuse for mass fake-account creation without a limit.
+const registerLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: "Too many accounts created from this location. Please try again later." },
+});
+
+// Forgot-password: without a limit, this becomes a free tool for spamming
+// someone's inbox with reset emails.
+const forgotPasswordLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: "Too many reset requests. Please try again in a few minutes." },
+});
+
 //TEMP TEST ROUTE
 router.get("/test", (req, res) => {
   res.send("Auth route working!");
 });
 
-router.post("/forgot-password", forgotPassword);
+router.post("/forgot-password", forgotPasswordLimiter, forgotPassword);
 router.post("/reset-password", resetPassword);
 
 // REGISTER
-router.post("/register", async (req, res) => {
+router.post("/register", registerLimiter, async (req, res) => {
   try {
     console.log("Register request body:", req.body); // log incoming data
 
@@ -49,7 +79,7 @@ router.post("/register", async (req, res) => {
 });
 
 // LOGIN
-router.post("/login", async (req, res) => {
+router.post("/login", loginLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });

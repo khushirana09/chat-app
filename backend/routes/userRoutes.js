@@ -1,18 +1,19 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const { requireAuth } = require("../middleware/auth");
 
 const router = express.Router();
 
-//userlist
-router.get("/all", async (req, res) => {
+// GET /api/users/all — list every user except the requester.
+// Previously unauthenticated (anyone could hit this with no token) and
+// returned everyone's email address. Now requires a valid JWT, derives
+// "who's asking" from that verified token instead of a client-supplied
+// query param, and only exposes username + profilePicture + lastSeen.
+router.get("/all", requireAuth, async (req, res) => {
   try {
-    const currentUsername = req.query.currentUsername;
-
     const users = await User.find(
-      { username: { $ne: currentUsername } }, // exclude current
-      "username profilePicture email"
+      { username: { $ne: req.user.username } }, // exclude current
+      "username profilePicture lastSeen"
     );
 
     res.status(200).json(users);
@@ -22,85 +23,50 @@ router.get("/all", async (req, res) => {
   }
 });
 
-// Register Route
-router.post("/register", async (req, res) => {
+// GET /api/users/me — the logged-in user's own profile.
+router.get("/me", requireAuth, async (req, res) => {
   try {
-    const { username, email, password } = req.body;
-
-    // Check for missing fields
-    if (!username || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    // Check if email or username already exists
-    const existingEmail = await User.findOne({ email });
-    const existingUsername = await User.findOne({ username });
-
-    if (existingEmail) {
-      return res.status(400).json({ message: "Email already registered" });
-    }
-
-    if (existingUsername) {
-      return res.status(400).json({ message: "Username already taken" });
-    }
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create new user
-    const newUser = new User({ username, email, password: hashedPassword });
-    await newUser.save();
-
-    res
-      .status(201)
-      .json({
-        message: "User registered successfully",
-        username: newUser.username,
-      });
+    const user = await User.findOne(
+      { username: req.user.username },
+      "username profilePicture about lastSeen"
+    );
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
   } catch (err) {
-    console.error("Register Error:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error fetching profile:", err);
+    res.status(500).json({ message: "Failed to fetch profile" });
   }
 });
 
-// Login Route
-router.post("/login", async (req, res) => {
+// PATCH /api/users/me — update your own profile picture (and/or about text).
+// Only ever updates the caller's own document — identity comes from the
+// verified JWT, never from the request body, so there's no way to edit
+// someone else's profile.
+router.patch("/me", requireAuth, async (req, res) => {
   try {
-    const { email, password } = req.body;
-
-    // Check if email and password are provided
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Email and password are required" });
+    const { profilePicture, about } = req.body;
+    const update = {};
+    if (typeof profilePicture === "string" && profilePicture.trim()) {
+      update.profilePicture = profilePicture.trim();
+    }
+    if (typeof about === "string") {
+      update.about = about.slice(0, 140);
+    }
+    if (Object.keys(update).length === 0) {
+      return res.status(400).json({ message: "Nothing to update" });
     }
 
-    // Find user by email
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "User not found" });
-
-    // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
-      return res.status(401).json({ message: "Invalid credentials" });
-
-    // Generate JWT
-    const token = jwt.sign(
-      { id: user._id, username: user.username },
-      process.env.JWT_SECRET || "default_secret", // fallback to avoid crashes
-      { expiresIn: "5h" }
+    const user = await User.findOneAndUpdate(
+      { username: req.user.username },
+      update,
+      { new: true, fields: "username profilePicture about lastSeen" }
     );
-
-    res.status(200).json({
-      message: "Login successful",
-      token,
-      username: user.username,
-      profilePicture: user.profilePicture || "",
-    });
+    res.json(user);
   } catch (err) {
-    console.error("Login Error:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error updating profile:", err);
+    res.status(500).json({ message: "Failed to update profile" });
   }
 });
 
 module.exports = router;
+

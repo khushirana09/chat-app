@@ -10,7 +10,10 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+<<<<<<< HEAD
     unique: true,
+=======
+>>>>>>> master
   },
   email: {
     type: String,
@@ -25,6 +28,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+<<<<<<< HEAD
+=======
+  lastSeen: {
+    type: Date,
+    default: null,
+  },
+>>>>>>> master
 
   //for password reset
   resetToken: { type: String },
