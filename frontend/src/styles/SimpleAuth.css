@@ -1,0 +1,71 @@
+@import "./theme.css";
+
+/* =========================================================
+   Shared layout for ForgotPassword and ResetPassword — both
+   are single-field "do one thing" screens, so they share one
+   simple centered-card layout rather than each defining its own.
+   ========================================================= */
+
+.simple-auth-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+  background: var(--yellow);
+}
+
+.simple-auth-shell .bg-blob:nth-child(1) {
+  width: 40vw;
+  height: 40vw;
+  background: var(--pink);
+  top: -16%;
+  left: -12%;
+}
+
+.simple-auth-shell .bg-blob:nth-child(2) {
+  width: 36vw;
+  height: 36vw;
+  background: var(--sky);
+  bottom: -16%;
+  right: -10%;
+  animation-delay: 1.3s;
+}
+
+.simple-auth-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  background: var(--white);
+  border: 3px solid var(--ink);
+  border-radius: 28px 28px 28px 8px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-pop-hover);
+}
+
+.simple-auth-card h1 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem;
+  color: var(--ink);
+}
+
+.simple-auth-card .auth-subtitle {
+  margin-bottom: 1.75rem;
+}
+
+.simple-auth-card form {
+  text-align: left;
+}
+
+@media (max-width: 420px) {
+  .simple-auth-card {
+    padding: 1.75rem 1.25rem;
+    border-radius: 22px 22px 22px 8px;
+  }
+}
