@@ -3,12 +3,10 @@ const mongoose = require("mongoose");
 // Create a message schema
 const messageSchema = new mongoose.Schema({
   sender: { type: String, required: true }, // Username or ID of sender
-<<<<<<< HEAD
   receiver: { type: String, required: true }, // Username or ID of receiver
   message: { type: String, required: true }, // The message text
   timestamp: { type: Date, default: Date.now }, // When it was sent (default = now)
   media: { type: String, default: null }, // for media
-=======
   receiver: { type: String, default: null }, // Username of receiver, "all" for global, or null for a group message
   groupId: { type: mongoose.Schema.Types.ObjectId, ref: "Group", default: null },
   message: { type: String, required: true }, // The message text
@@ -42,7 +40,6 @@ const messageSchema = new mongoose.Schema({
     _id: false,
   },
   edited: { type: Boolean, default: false },
->>>>>>> master
   createdAt: { type: Date, default: Date.now },
 });
 
