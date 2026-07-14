@@ -78,12 +78,14 @@ async function broadcastToMessageAudience(message, event, payload) {
 
 app.use("/api/upload", uploadRoute); //cloudinary upload route
 
-// Allowed frontend origins. localhost:3000 always allowed for local dev;
-// CLIENT_URL_PROD (e.g. your Vercel URL) is added on top when set, so you
-// don't have to hardcode/redeploy the backend every time the frontend URL changes.
+// Allowed frontend origins. Normalize values to avoid mismatches
+// caused by trailing slashes in environment variables.
+const envClientLocal = (process.env.CLIENT_URL_LOCAL || "").replace(/\/$/, "");
+const envClientProd = (process.env.CLIENT_URL_PROD || "").replace(/\/$/, "");
 const allowedOrigins = [
   "http://localhost:3000",
-  process.env.CLIENT_URL_PROD,
+  envClientLocal,
+  envClientProd,
 ].filter(Boolean);
 
 // Express CORS Options
