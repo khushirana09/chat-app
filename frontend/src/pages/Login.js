@@ -59,9 +59,21 @@ const Login = () => {
 
   return (
     <div className="auth-page">
-      <div className="login-shell">
+      <div className="login-shell auth-split">
         <div className="bg-blob" aria-hidden="true"></div>
         <div className="bg-blob" aria-hidden="true"></div>
+
+        <div className="auth-split-info">
+          <div className="mascot" aria-hidden="true">
+            <div className="mascot-body">
+              <span className="mascot-eye"></span>
+              <span className="mascot-eye"></span>
+            </div>
+          </div>
+          <span className="brand-eyebrow">Private · Instant · Yours</span>
+          <h2>Good to see you again.</h2>
+          <p>Your conversations picked up right where you left them.</p>
+        </div>
 
         <div className="login-card">
           {avatar ? (

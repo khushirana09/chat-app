@@ -10,10 +10,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 3.5rem;
   padding: 2rem 1.25rem;
   position: relative;
   overflow: hidden;
   background: var(--sky);
+}
+
+.welcome-shell .auth-split-info h2,
+.welcome-shell .auth-split-info p {
+  color: var(--ink);
 }
 
 .welcome-shell .bg-blob:nth-child(1) {
@@ -65,11 +71,27 @@
 }
 
 @keyframes wave {
-  0%, 100% { transform: rotate(0deg); }
-  15% { transform: rotate(14deg); }
-  30% { transform: rotate(-8deg); }
-  45% { transform: rotate(14deg); }
-  60% { transform: rotate(0deg); }
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  15% {
+    transform: rotate(14deg);
+  }
+
+  30% {
+    transform: rotate(-8deg);
+  }
+
+  45% {
+    transform: rotate(14deg);
+  }
+
+  60% {
+    transform: rotate(0deg);
+  }
 }
 
 .welcome-card h1 {

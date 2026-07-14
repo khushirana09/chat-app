@@ -38,9 +38,21 @@ function WelcomeName() {
 
   return (
     <div className="auth-page welcome-page">
-      <div className="welcome-shell">
+      <div className="welcome-shell auth-split">
         <div className="bg-blob" aria-hidden="true"></div>
         <div className="bg-blob" aria-hidden="true"></div>
+
+        <div className="auth-split-info">
+          <div className="mascot" aria-hidden="true">
+            <div className="mascot-body">
+              <span className="mascot-eye"></span>
+              <span className="mascot-eye"></span>
+            </div>
+          </div>
+          <span className="brand-eyebrow">Private · Instant · Yours</span>
+          <h2>Let's get you set up.</h2>
+          <p>Just a couple of quick steps and you'll be chatting in no time.</p>
+        </div>
 
         <div className="welcome-card">
           <div className="welcome-brand">

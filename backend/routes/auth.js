@@ -85,6 +85,22 @@ router.post("/login", loginLimiter, async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "User not found" });
 
+    // Guards against a crash (not just a wrong-password rejection) if this
+    // account's password field is missing or malformed — e.g. a leftover
+    // record from before the duplicate register/login routes were
+    // consolidated. bcrypt.compare throws on a non-string hash instead of
+    // returning false, which was landing in the catch block below as a
+    // generic "Server error" with no indication of the real cause.
+    if (!user.password || typeof user.password !== "string") {
+      console.error(
+        `Login blocked: user ${email} has no valid password hash on their account.`
+      );
+      return res.status(400).json({
+        message:
+          "This account can't log in with a password. Try resetting your password.",
+      });
+    }
+
     const ismatch = await bcrypt.compare(password, user.password);
     if (!ismatch)
       return res.status(401).json({ message: "Invalid credentials" });
@@ -99,7 +115,7 @@ router.post("/login", loginLimiter, async (req, res) => {
 
     res.json({ token, username: user.username });
   } catch (err) {
-    console.error(err);
+    console.error("Login error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });

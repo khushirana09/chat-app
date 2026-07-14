@@ -79,13 +79,28 @@
 }
 
 @keyframes mascotBob {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-4px) rotate(-2deg); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
 }
 
 @keyframes mascotBlink {
-  0%, 92%, 100% { transform: scaleY(1); }
-  95% { transform: scaleY(0.15); }
+
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+
+  95% {
+    transform: scaleY(0.15);
+  }
 }
 
 /* ---------------- Brand mark (small logo chip + eyebrow label) ---------------- */
@@ -233,10 +248,21 @@
   transition: background 0.2s ease;
 }
 
-.strength-bars span.filled.s-weak { background: var(--danger); }
-.strength-bars span.filled.s-fair { background: var(--yellow); }
-.strength-bars span.filled.s-good { background: var(--sky); }
-.strength-bars span.filled.s-strong { background: var(--green); }
+.strength-bars span.filled.s-weak {
+  background: var(--danger);
+}
+
+.strength-bars span.filled.s-fair {
+  background: var(--yellow);
+}
+
+.strength-bars span.filled.s-good {
+  background: var(--sky);
+}
+
+.strength-bars span.filled.s-strong {
+  background: var(--green);
+}
 
 .strength-label {
   font-size: 0.78rem;
@@ -383,8 +409,15 @@
 }
 
 @keyframes popIn {
-  from { opacity: 0; transform: scale(0.85); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .spinner {
@@ -398,7 +431,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loader-message {
@@ -414,8 +449,15 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(5px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ---------------- Progress dots (multi-step onboarding) ---------------- */
@@ -439,6 +481,62 @@
   background: var(--yellow);
 }
 
+/* ---------------- Shared two-column split layout ----------------
+   A small centered card looks fine on mobile but sparse/empty on a wide
+   desktop screen. Any single-card page (WelcomeName, Login, etc.) can opt
+   into this: it adds a companion info panel (mascot + tagline) beside the
+   card on wide screens, and collapses back to just the centered card on
+   narrower ones -- same idea Register.js already uses, made reusable here
+   so every page doesn't redefine its own copy. */
+
+.auth-split {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3.5rem;
+  padding: 2rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-split-info {
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 320px;
+  position: relative;
+  z-index: 1;
+}
+
+.auth-split-info .mascot {
+  margin: 0 0 1.1rem;
+}
+
+.auth-split-info h2 {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0.9rem 0 0.6rem;
+  line-height: 1.2;
+}
+
+.auth-split-info p {
+  color: var(--ink);
+  opacity: 0.75;
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0;
+  max-width: 30ch;
+}
+
+@media (min-width: 900px) {
+  .auth-split-info {
+    display: flex;
+  }
+}
+
 /* ---------------- Floating background blobs (decorative) ---------------- */
 
 .bg-blob {
@@ -450,11 +548,19 @@
 }
 
 @keyframes blobFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(4%, 6%) scale(1.08); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(4%, 6%) scale(1.08);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .spinner,
   .btn-spinner,
   .mascot-body,

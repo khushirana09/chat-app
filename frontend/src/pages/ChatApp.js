@@ -118,6 +118,12 @@ function ChatApp() {
   const prevScrollHeightRef = useRef(0);
   const touchStartXRef = useRef(null);
   const touchDeltaXRef = useRef(0);
+  // Multiple things can independently detect "the token is bad" around the
+  // same time (the socket's connect_error AND the REST 401 below) — without
+  // this guard, both call navigate() within milliseconds of each other,
+  // and browsers throttle/reject rapid repeated history.pushState calls
+  // ("The operation is insecure"). This ensures it only ever happens once.
+  const hasRedirectedRef = useRef(false);
   const { logout } = useAuth();
 
   // Keep a ref in sync so the socket handlers (registered once on mount)
@@ -155,6 +161,15 @@ function ChatApp() {
 
     setUsername(storedName);
 
+    // Single funnel for "the token is bad, send them back to login" — see
+    // the hasRedirectedRef comment above for why this exists.
+    const redirectToLogin = () => {
+      if (hasRedirectedRef.current) return;
+      hasRedirectedRef.current = true;
+      localStorage.removeItem("token");
+      navigate("/login");
+    };
+
     const newSocket = io(BACKEND_URL, { query: { token } });
     setSocket(newSocket);
 
@@ -167,8 +182,7 @@ function ChatApp() {
       console.error("Socket connection failed:", err.message);
       if (err.message === "Authentication error") {
         newSocket.disconnect(); // stop it from retrying with the same bad token
-        localStorage.removeItem("token");
-        navigate("/login");
+        redirectToLogin();
       }
     });
 
@@ -180,7 +194,7 @@ function ChatApp() {
     })
       .then((res) => {
         if (res.status === 401) {
-          navigate("/login");
+          redirectToLogin();
           return [];
         }
         return res.json();
