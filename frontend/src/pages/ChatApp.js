@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { FaSearch, FaArrowLeft } from "react-icons/fa";
+import VoiceRecorder from "../components/VoiceRecorder";
 import { API_BASE_URL } from "../config";
 import "../styles/ChatApp.css";
 
@@ -88,6 +89,7 @@ function ChatApp() {
   const [searchQuery, setSearchQuery] = useState("");
   const [unreadCounts, setUnreadCounts] = useState({});
   const [mobileChatOpen, setMobileChatOpen] = useState(false);
+  const [isRecordingVoice, setIsRecordingVoice] = useState(false);
   const [swipedContactKey, setSwipedContactKey] = useState(null);
   const [contactMenuFor, setContactMenuFor] = useState(null);
   const [infoModalFor, setInfoModalFor] = useState(null);
@@ -401,6 +403,37 @@ function ChatApp() {
       setMediaType(type);
     } catch (error) {
       console.error("Upload error:", error);
+    }
+  };
+
+  //--------------handleVoiceRecorded------------------
+  // Called by VoiceRecorder once a clip is finished. Uploads it the same
+  // way handleFileUpload does, then reuses the exact same preview + send
+  // flow — the recorded clip is just another "media" attachment as far as
+  // the rest of the app (and the backend) is concerned.
+  const handleVoiceRecorded = async (blob) => {
+    const localUrl = URL.createObjectURL(blob);
+    setPreviewType("audio");
+    setPreviewMedia(localUrl);
+
+    const formData = new FormData();
+    formData.append("file", blob, "voice-message.webm");
+    formData.append("upload_preset", "chatapp_media_upload");
+
+    try {
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dbhafx1li/auto/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      setMediaUrl(data.secure_url);
+      setMediaType("audio");
+    } catch (error) {
+      console.error("Voice message upload error:", error);
     }
   };
 
@@ -1161,7 +1194,12 @@ function ChatApp() {
           )}
 
           <div className="wa-composer">
-            <button className="wa-icon-btn" onClick={toggleEmojiPicker} type="button">
+            <button
+              className="wa-icon-btn"
+              onClick={toggleEmojiPicker}
+              type="button"
+              disabled={isRecordingVoice}
+            >
               😊
             </button>
 
@@ -1171,7 +1209,11 @@ function ChatApp() {
               </div>
             )}
 
-            <label htmlFor="fileInput" className="wa-icon-btn" title="Attach">
+            <label
+              htmlFor="fileInput"
+              className={`wa-icon-btn ${isRecordingVoice ? "disabled" : ""}`}
+              title="Attach"
+            >
               📎
             </label>
             <input
@@ -1180,12 +1222,19 @@ function ChatApp() {
               accept="image/*,video/*,audio/*,.pdf,.doc,.docx"
               style={{ display: "none" }}
               onChange={handleFileUpload}
+              disabled={isRecordingVoice}
+            />
+
+            <VoiceRecorder
+              onRecorded={handleVoiceRecorded}
+              onRecordingChange={setIsRecordingVoice}
             />
 
             <input
               value={message}
               onChange={handleInputChange}
               placeholder={`Message ${selectedChatLabel}`}
+              disabled={isRecordingVoice}
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSend();
               }}
@@ -1194,7 +1243,7 @@ function ChatApp() {
             <button
               className="wa-send"
               onClick={handleSend}
-              disabled={!message.trim() && !mediaUrl}
+              disabled={isRecordingVoice || (!message.trim() && !mediaUrl)}
             >
               Send
             </button>
