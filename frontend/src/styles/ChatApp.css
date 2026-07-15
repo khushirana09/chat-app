@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap");
 
+* {
+  box-sizing: border-box;
+}
+
 :root {
   --bg-cream: #fff6e9;
   --sky: #4db6ff;
@@ -73,6 +77,7 @@
   z-index: 1;
   width: 100%;
   height: 100%;
+  min-width: 0;
   border: none;
   border-radius: 0;
   overflow: hidden;
@@ -99,6 +104,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .wa-label {
@@ -1119,11 +1125,11 @@
   position: relative;
   border-top: 3px solid var(--ink);
   padding: 14px 16px;
-  display: grid;
-  grid-template-columns: auto auto auto 1fr auto;
-  gap: 8px;
+  display: flex;
   align-items: center;
+  gap: 8px;
   background: var(--white);
+  flex-wrap: wrap;
 }
 
 .wa-icon-btn {
@@ -1263,6 +1269,8 @@
   color: var(--ink);
   outline: none;
   font-family: var(--font-body);
+  flex: 1 1 180px;
+  min-width: 0;
 }
 
 .wa-composer input::placeholder {
@@ -1389,8 +1397,20 @@
     align-items: center;
   }
 
-  .wa-message-bubble {
-    max-width: 82%;
+  .wa-sidebar-header,
+  .wa-chat-header,
+  .wa-reply-bar,
+  .wa-preview {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .wa-search {
+    margin: 10px 12px 4px;
+  }
+
+  .wa-contact-list {
+    padding: 8px;
   }
 
   .wa-contact-action {
@@ -1401,8 +1421,23 @@
     transform: translateX(-192px);
   }
 
-  /* :hover doesn't exist on touch devices — show the toolbar plainly
-     instead of hiding functionality behind an interaction that can't happen. */
+  .wa-message-bubble {
+    max-width: 82%;
+  }
+
+  .wa-message-row.mine,
+  .wa-message-row.theirs {
+    flex-wrap: wrap;
+  }
+
+  .wa-message-row.mine {
+    justify-content: flex-end;
+  }
+
+  .wa-messages {
+    padding: 18px 14px;
+  }
+
   .wa-msg-actions {
     opacity: 0.9;
     pointer-events: auto;
@@ -1414,9 +1449,21 @@
     padding: 0;
   }
 
-  .wa-message-row.mine {
-    flex-wrap: wrap;
-    justify-content: flex-end;
+  .wa-composer {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+
+  .wa-composer input {
+    padding: 10px 12px;
+    font-size: 13.5px;
+    flex: 1 1 100%;
+    order: 4;
+  }
+
+  .wa-send {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -1425,13 +1472,13 @@
     font-size: 16px;
   }
 
-  .wa-messages {
-    padding: 18px 14px;
+  .wa-contact-top strong {
+    font-size: 13.5px;
   }
 
-  .wa-composer {
-    padding: 10px 12px;
-    gap: 5px;
+  .wa-avatar {
+    width: 40px;
+    height: 40px;
   }
 
   .wa-icon-btn {
@@ -1445,9 +1492,11 @@
     font-size: 13px;
   }
 
-  .wa-composer input {
-    padding: 10px 12px;
-    font-size: 13.5px;
+  .wa-emoji-picker {
+    left: 12px;
+    right: 12px;
+    transform: none;
+    width: auto;
   }
 }
 
