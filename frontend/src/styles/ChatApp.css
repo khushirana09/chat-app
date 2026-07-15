@@ -203,6 +203,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 16px;
+  touch-action: pan-y;
 }
 
 .wa-contact-swipe.menu-open {
@@ -1312,6 +1313,20 @@
   border-radius: 18px;
   overflow: hidden;
   box-shadow: var(--shadow-pop-hover);
+  max-width: calc(100vw - 32px);
+}
+
+@media (max-width: 420px) {
+
+  /* emoji-mart's picker has its own fixed internal width — anchoring to a
+     hardcoded left offset pushed it past the right edge on narrow phones.
+     Centering it in the viewport keeps it fully on-screen instead. */
+  .wa-emoji-picker {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    bottom: 62px;
+  }
 }
 
 /* ---------------- Empty state ---------------- */
@@ -1416,12 +1431,23 @@
 
   .wa-composer {
     padding: 10px 12px;
+    gap: 5px;
   }
 
   .wa-icon-btn {
     width: 36px;
     height: 36px;
     font-size: 16px;
+  }
+
+  .wa-send {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .wa-composer input {
+    padding: 10px 12px;
+    font-size: 13.5px;
   }
 }
 

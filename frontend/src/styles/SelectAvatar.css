@@ -128,7 +128,13 @@
   gap: 0.75rem;
 }
 
+.avatar-actions .btn-secondary {
+  flex: 1;
+}
+
 .avatar-actions .submit-btn {
+  flex: 1;
+  width: auto;
   margin-top: 0;
 }
 
