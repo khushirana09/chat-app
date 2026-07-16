@@ -87,6 +87,7 @@ function ChatApp() {
   const [previewType, setPreviewType] = useState("");
   const [selectedMessages, setSelectedMessages] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [usersLoadError, setUsersLoadError] = useState(false);
   const [unreadCounts, setUnreadCounts] = useState({});
   const [mobileChatOpen, setMobileChatOpen] = useState(false);
   const [isRecordingVoice, setIsRecordingVoice] = useState(false);
@@ -199,11 +200,24 @@ function ChatApp() {
           redirectToLogin();
           return [];
         }
+        if (!res.ok) {
+          throw new Error(`Server responded ${res.status}`);
+        }
         return res.json();
       })
       .then((data) => {
         const filtered = data.filter((u) => u.username !== storedName);
         setUsers(filtered);
+        setUsersLoadError(false);
+      })
+      .catch((err) => {
+        // Previously unhandled — any failure here (network error, CORS
+        // block, non-OK response) left `users` empty forever with zero
+        // indication anything went wrong. The sidebar would just show
+        // "Global Chat" and nothing else, which looks identical to a
+        // layout bug even though it's actually a failed request.
+        console.error("Failed to load contacts:", err);
+        setUsersLoadError(true);
       });
 
     newSocket.emit("getConversationPreviews");
@@ -1107,7 +1121,13 @@ function ChatApp() {
             })}
 
             {visibleContacts.length === 0 && (
-              <div className="wa-empty-contacts">No contacts match "{searchQuery}"</div>
+              <div className="wa-empty-contacts">
+                {usersLoadError
+                  ? "Couldn't load contacts — check your connection and reload."
+                  : searchQuery
+                    ? `No contacts match "${searchQuery}"`
+                    : "No other users yet — once someone else registers, they'll show up here."}
+              </div>
             )}
           </div>
         </aside>

@@ -1,9 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap");
 
-* {
-  box-sizing: border-box;
-}
-
 :root {
   --bg-cream: #fff6e9;
   --sky: #4db6ff;
@@ -77,7 +73,6 @@
   z-index: 1;
   width: 100%;
   height: 100%;
-  min-width: 0;
   border: none;
   border-radius: 0;
   overflow: hidden;
@@ -104,7 +99,6 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  flex-wrap: wrap;
 }
 
 .wa-label {
@@ -598,9 +592,11 @@
   border: none;
   background: none;
   color: var(--ink);
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
-  padding: 4px;
+  padding: 8px;
+  margin: -8px 2px -8px -8px;
+  flex-shrink: 0;
 }
 
 .wa-chat-header h3 {
@@ -1126,10 +1122,21 @@
   border-top: 3px solid var(--ink);
   padding: 14px 16px;
   display: flex;
-  align-items: center;
+  flex-wrap: nowrap;
   gap: 8px;
+  align-items: center;
   background: var(--white);
-  flex-wrap: wrap;
+}
+
+.wa-composer>.wa-icon-btn,
+.wa-composer>label.wa-icon-btn,
+.wa-composer>.wa-send {
+  flex-shrink: 0;
+}
+
+.wa-composer>input {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .wa-icon-btn {
@@ -1269,8 +1276,6 @@
   color: var(--ink);
   outline: none;
   font-family: var(--font-body);
-  flex: 1 1 180px;
-  min-width: 0;
 }
 
 .wa-composer input::placeholder {
@@ -1322,19 +1327,6 @@
   overflow: hidden;
   box-shadow: var(--shadow-pop-hover);
   max-width: calc(100vw - 32px);
-}
-
-@media (max-width: 420px) {
-
-  /* emoji-mart's picker has its own fixed internal width — anchoring to a
-     hardcoded left offset pushed it past the right edge on narrow phones.
-     Centering it in the viewport keeps it fully on-screen instead. */
-  .wa-emoji-picker {
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    bottom: 62px;
-  }
 }
 
 /* ---------------- Empty state ---------------- */
@@ -1397,20 +1389,8 @@
     align-items: center;
   }
 
-  .wa-sidebar-header,
-  .wa-chat-header,
-  .wa-reply-bar,
-  .wa-preview {
-    padding-left: 14px;
-    padding-right: 14px;
-  }
-
-  .wa-search {
-    margin: 10px 12px 4px;
-  }
-
-  .wa-contact-list {
-    padding: 8px;
+  .wa-message-bubble {
+    max-width: 82%;
   }
 
   .wa-contact-action {
@@ -1421,23 +1401,8 @@
     transform: translateX(-192px);
   }
 
-  .wa-message-bubble {
-    max-width: 82%;
-  }
-
-  .wa-message-row.mine,
-  .wa-message-row.theirs {
-    flex-wrap: wrap;
-  }
-
-  .wa-message-row.mine {
-    justify-content: flex-end;
-  }
-
-  .wa-messages {
-    padding: 18px 14px;
-  }
-
+  /* :hover doesn't exist on touch devices — show the toolbar plainly
+     instead of hiding functionality behind an interaction that can't happen. */
   .wa-msg-actions {
     opacity: 0.9;
     pointer-events: auto;
@@ -1449,21 +1414,9 @@
     padding: 0;
   }
 
-  .wa-composer {
-    padding: 10px 12px;
-    gap: 6px;
-  }
-
-  .wa-composer input {
-    padding: 10px 12px;
-    font-size: 13.5px;
-    flex: 1 1 100%;
-    order: 4;
-  }
-
-  .wa-send {
-    width: 100%;
-    justify-content: center;
+  .wa-message-row.mine {
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 }
 
@@ -1472,19 +1425,19 @@
     font-size: 16px;
   }
 
-  .wa-contact-top strong {
-    font-size: 13.5px;
+  .wa-messages {
+    padding: 18px 14px;
   }
 
-  .wa-avatar {
-    width: 40px;
-    height: 40px;
+  .wa-composer {
+    padding: 10px 12px;
+    gap: 5px;
   }
 
   .wa-icon-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 16px;
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
   }
 
   .wa-send {
@@ -1492,11 +1445,36 @@
     font-size: 13px;
   }
 
+  .wa-composer input {
+    padding: 10px 12px;
+    font-size: 13.5px;
+  }
+
+  /* emoji-mart's picker has its own fixed internal width — anchoring to a
+     hardcoded left offset pushed it past the right edge on narrow phones.
+     Centering it in the viewport keeps it fully on-screen instead. */
   .wa-emoji-picker {
-    left: 12px;
-    right: 12px;
-    transform: none;
-    width: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    bottom: 62px;
+  }
+
+  .wa-sidebar-header {
+    padding: 14px 16px;
+  }
+
+  .wa-search {
+    margin: 10px 12px 4px;
+  }
+
+  .wa-contact {
+    padding: 8px;
+  }
+
+  .wa-avatar {
+    width: 38px;
+    height: 38px;
   }
 }
 
