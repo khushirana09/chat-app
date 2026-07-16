@@ -589,14 +589,23 @@
 
 .wa-back-btn {
   display: none;
-  border: none;
-  background: none;
+  align-items: center;
+  gap: 6px;
+  border: 2px solid var(--ink);
+  background: var(--white);
   color: var(--ink);
-  font-size: 20px;
+  font-size: 14px;
+  font-weight: 800;
+  font-family: var(--font-display);
   cursor: pointer;
-  padding: 8px;
-  margin: -8px 2px -8px -8px;
+  padding: 8px 12px;
+  border-radius: 999px;
   flex-shrink: 0;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.wa-back-btn svg {
+  font-size: 15px;
 }
 
 .wa-chat-header h3 {
